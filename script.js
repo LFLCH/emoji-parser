@@ -5,7 +5,10 @@ let visible_images;
 
 const max_results = 50;
 
-search.setAttribute('placeholder', 'joy...')
+// If you loaded all the emojis on you machine, you do not need to fetch emojipedia's images
+const local_load = false; 
+
+search.setAttribute('placeholder', 'smiling face...')
 
 async function fetchImageFiles() {
   const response = await fetch("emoji-names.json");
@@ -29,7 +32,8 @@ async function showFilteredImages() {
   for (let img of visible_images) {
     let src = img['src']
     await fetch(src).then(data => {
-      grid.innerHTML += '<img src="' + data.url + '" title="' + img['name'] + '"/>';
+      let final_src = local_load ? data.url :img['data_src']
+      grid.innerHTML += '<img src="' + final_src + '" title="' + img['name'] + '"/>';
     })
     if (uniqueId !== latestDisplayCall) {
       return;
