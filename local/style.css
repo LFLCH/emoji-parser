@@ -1,0 +1,34 @@
+img{
+    width:100px;
+}
+img:hover {
+    outline: 1px solid black;
+    border-radius: 5px;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 50px;
+}
+body > *{
+    max-width: 80%;
+}
+#emoji-grid{
+    display: flex;
+    flex-wrap: wrap;
+}
+#emoji-grid img {
+    display: none;
+}
+  
+#emoji-grid img.visible {
+display: block;
+}
+
+input {
+    font-size: xx-large;
+}
+  
