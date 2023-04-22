@@ -36,10 +36,14 @@ png_files = [f for f in os.listdir(directory) if f.endswith('.png')]
 
 
 # Create an HTML file structure
-with open('animated-emojis.html', 'w') as f:
+with open('index.html', 'w') as f:
     f.write('<html>\n')
+    f.write('<meta>\n')
     f.write('<link rel="stylesheet" href="style.css">\n')
     f.write('<script src="script.js" async></script>\n')
+    f.write('<link rel="icon" type="image/png" href="https://em-content.zobj.net/source/microsoft-teams/337/parrot_1f99c.png"/>\n')
+    f.write('<title>Emoji Parser</title>\n')
+    f.write('</meta>\n')
     f.write('<body>\n')
     f.write('<input id="search" name="search-emojis" type="text"">\n')
     f.write('<div id="emoji-grid">\n')

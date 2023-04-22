@@ -33,7 +33,11 @@ async function showFilteredImages() {
     let src = img['src']
     await fetch(src).then(data => {
       let final_src = local_load ? data.url :img['data_src']
-      grid.innerHTML += '<img src="' + final_src + '" title="' + img['name'] + '"/>';
+      let tag = "";
+      tag+= '<a href="'+img['data_src']+'" target="_blank">';
+      tag += '<img src="' + final_src + '" title="' + img['name'] + '"/>';
+      tag+="</a>";
+      grid.innerHTML+=tag;
     })
     if (uniqueId !== latestDisplayCall) {
       return;

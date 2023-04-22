@@ -4,6 +4,7 @@ img{
 img:hover {
     outline: 1px solid black;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 body {
