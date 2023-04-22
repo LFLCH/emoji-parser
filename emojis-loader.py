@@ -1,5 +1,4 @@
 import os
-
 import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
@@ -20,6 +19,7 @@ for i,img in enumerate(imgs):
     if src == '/static/img/lazy.svg':
         src = img['data-src']
     img['src']=src
+    
     name = img['alt']
     if not os.path.isfile(directory+'/'+format_file_name(name)+'.png'):
         response = requests.get(src)
@@ -35,23 +35,29 @@ for i,img in enumerate(imgs):
 png_files = [f for f in os.listdir(directory) if f.endswith('.png')]
 
 
-
-# Create an HTML file and write the image tags to it
+# Create an HTML file structure
 with open('animated-emojis.html', 'w') as f:
     f.write('<html>\n')
     f.write('<link rel="stylesheet" href="style.css">\n')
     f.write('<script src="script.js" async></script>\n')
     f.write('<body>\n')
-    f.write('<input id="search" name="search-emojis" type="text" >\n')
+    f.write('<input id="search" name="search-emojis" type="text"">\n')
     f.write('<div id="emoji-grid">\n')
+    f.write('</div>')
+    f.write('</body>\n')
+    f.write('</html>\n')
+
+with open('emoji-names.json','w') as f:
+    files = '['
     for img in imgs:
         name = img['alt']
         png_file = format_file_name(name)+'.png'
         if png_file in png_files:
             data_src =img['src']
-            f.write(f'<img src="../{directory}/{png_file}" title="{name}" data-src={data_src} >\n')
+            files+='{"name":"'+name+'", "src":"/animated-emojis/'+png_file+'", "data_src":"'+data_src+'"'+'}\n'
+            if img!=imgs[-1]:
+                files+=','
         else :
             print(png_file)
-    f.write('</div>')
-    f.write('</body>\n')
-    f.write('</html>\n')
+    files+=']'
+    f.write(files)

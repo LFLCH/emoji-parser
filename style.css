@@ -20,13 +20,6 @@ body > *{
     display: flex;
     flex-wrap: wrap;
 }
-#emoji-grid img {
-    display: none;
-}
-  
-#emoji-grid img.visible {
-display: block;
-}
 
 input {
     font-size: xx-large;
