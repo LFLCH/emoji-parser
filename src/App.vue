@@ -61,7 +61,7 @@ async function showFilteredImages(toshow : ImageInfo[]){
 <template>
     <span class="p-input-icon-left" >
         <i class="pi pi-search" />
-        <InputText v-model="searchvalue" placeholder="Smiling face" class="p-inputtext-lg" @update:model-value="search" />
+        <InputText v-model="searchvalue" placeholder="Smiling face" class="p-inputtext-lg" @update:model-value="search"  style="width: -webkit-fill-available;"/>
     </span>
     <span style="width: 10vw; margin-top: 1em;margin-bottom: 2em;">
             <ProgressBar :value="100*(visible_images.length/images_to_load)" style="height:10px;" :show-value="false" ></ProgressBar>
