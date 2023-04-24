@@ -39,9 +39,13 @@ async function search() {
 async function showFilteredImages(toshow : ImageInfo[]){
     for(let img of toshow){
         let src = local_load ? img.src : img.data_src;
-        await fetch(src).then(() => {
+        const imgel = new Image();
+        imgel.onload = function () {
+            // when the data is loaded and it is not already present
             if(!visible_images.value.includes(img)) visible_images.value.push(img);
-        });
+        };
+        imgel.title=img['name'];
+        imgel.src = src;
     }
 }
 
