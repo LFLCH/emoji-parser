@@ -6,6 +6,7 @@ const visible_images = ref<ImageInfo[]>([]);
 const image_files = ref<ImageInfo[]>([]);
 const max_results = 50;
 let searchvalue = ref<string>("");
+const images_to_load = ref<number>(0);
 
 
 // If you loaded all the emojis on you machine,
@@ -27,35 +28,45 @@ onMounted(async () => {
 
 async function search() {
     visible_images.value=[];
+    images_to_load.value = 0;
     let toshow = image_files.value.filter(image => {
         const title = image['name']
         return title.toLowerCase().includes(searchvalue.value.toLowerCase());
     }).slice(0, max_results);
-    showFilteredImages(toshow)
+    await showFilteredImages(toshow)
 }
 
-// the following function is only heure to have the same "fluent" effect as in the vanilla solution.
-// we could skip it, and just have visible_images.value = toshow; (this fetch is not neccessary).
+
+let latestDisplayCall = 0;  // used in order to overwrite the content if another call arrives during its action.
 async function showFilteredImages(toshow : ImageInfo[]){
+    const uniqueId = Date.now();
+    latestDisplayCall = uniqueId;
+    images_to_load.value= toshow.length;
+    visible_images.value = [];
     for(let img of toshow){
         let src = local_load ? img.src : img.data_src;
         const imgel = new Image();
         imgel.onload = function () {
-            // when the data is loaded and it is not already present
-            if(!visible_images.value.includes(img)) visible_images.value.push(img);
+                visible_images.value.push(img);
         };
         imgel.title=img['name'];
         imgel.src = src;
+        if (uniqueId !== latestDisplayCall) {
+            return;
+        }
     }
 }
 
 
 </script>
 <template>
-    <span class="p-input-icon-left">
+    <span class="p-input-icon-left" >
         <i class="pi pi-search" />
         <InputText v-model="searchvalue" placeholder="Smiling face" class="p-inputtext-lg" @update:model-value="search" />
     </span>
+    <span style="width: 10vw; margin-top: 1em;margin-bottom: 2em;">
+            <ProgressBar :value="100*(visible_images.length/images_to_load)" style="height:10px;" :show-value="false" ></ProgressBar>
+        </span>  
     <div id="emoji-grid">
         <a v-for="imginfo in visible_images" v-bind:key="imginfo.name" v-bind:href="imginfo.data_src" target="_blank">
             <img v-bind:src="local_load ? imginfo.src : imginfo.data_src" v-bind:title="imginfo.name">
