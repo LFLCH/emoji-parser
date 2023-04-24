@@ -44,16 +44,15 @@ async function showFilteredImages(toshow : ImageInfo[]){
     images_to_load.value= toshow.length;
     visible_images.value = [];
     for(let img of toshow){
+        if(uniqueId !== latestDisplayCall)break; // stop the process if it is not necessary anymore
         let src = local_load ? img.src : img.data_src;
         const imgel = new Image();
         imgel.onload = function () {
-                visible_images.value.push(img);
+             // when the data is loaded and it is not already present
+             if(uniqueId == latestDisplayCall && !visible_images.value.includes(img)) visible_images.value.push(img);
         };
         imgel.title=img['name'];
         imgel.src = src;
-        if (uniqueId !== latestDisplayCall) {
-            return;
-        }
     }
 }
 
