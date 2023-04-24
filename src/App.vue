@@ -10,7 +10,7 @@ let searchvalue = ref<string>("");
 
 // If you loaded all the emojis on you machine,
 // you do not need to fetch emojipedia's images
-const local_load = true;
+const local_load = false;
 
 async function fetchImageFiles(): Promise<ImageInfo[]> {
     const response = await fetch("emoji-names.json");
