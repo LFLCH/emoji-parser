@@ -22,7 +22,7 @@ fetchImageFiles().then(data => {
 })
 
 
-// datetime of the latest time that showFilteredImages has been called
+// datetime of the latest time that showFilteredImages has been called (in order to avoid duplicates)
 let latestDisplayCall = 0; 
 
 async function showFilteredImages() {
@@ -30,15 +30,17 @@ async function showFilteredImages() {
   latestDisplayCall = uniqueId;
   grid.innerHTML = '';
   for (let img of visible_images) {
-    let src = img['src']
-    await fetch(src).then(data => {
-      let final_src = local_load ? data.url :img['data_src']
-      let tag = "";
-      tag+= '<a href="'+img['data_src']+'" target="_blank">';
-      tag += '<img src="' + final_src + '" title="' + img['name'] + '"/>';
-      tag+="</a>";
-      grid.innerHTML+=tag;
-    })
+    let src = local_load ? img['src'] :img['data_src']
+    let final_src =src; 
+    const imgel = new Image();
+    imgel.onload = function() {
+      // when the data is loaded and it is not already present
+      if(Array(...grid.children).filter(el=>{return el.getAttribute('src')===final_src}).length==0){
+        grid.appendChild(imgel)
+      }
+    };
+    imgel.title=img['name'];
+    imgel.src = src;    
     if (uniqueId !== latestDisplayCall) {
       return;
     }
