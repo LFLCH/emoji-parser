@@ -11,7 +11,7 @@ url = 'https://emojipedia.org/microsoft-teams/'
 response = requests.get(url)
 soup = BeautifulSoup(response.content, 'html.parser')
 imgs = soup.find('article').find('ul', {'class': 'emoji-grid'}).find_all('img')
-directory = 'animated-emojis'
+directory = 'emojiparser/public/animated-emojis'
 
 progression_message=''
 for i,img in enumerate(imgs):
@@ -24,7 +24,7 @@ for i,img in enumerate(imgs):
     if not os.path.isfile(directory+'/'+format_file_name(name)+'.png'):
         response = requests.get(src)
         image_content = response.content
-        with open('animated-emojis/'+format_file_name(name)+'.png', 'wb') as f:
+        with open(directory+"/"+format_file_name(name)+'.png', 'wb') as f:
             f.write(image_content)
         print(' ' * len(progression_message),end='\r')
         progression_message = str(i+1)+"/"+str(len(imgs))+" : "+name+" ("+format_file_name(name)+".png)"
@@ -45,7 +45,7 @@ with open('index.html', 'w') as f:
     f.write('<title>Emoji Parser</title>\n')
     f.write('</meta>\n')
     f.write('<body>\n')
-    f.write('<input id="search" name="search-emojis" type="text"">\n')
+    f.write('<input id="search" name="search-emojis" type="text">\n')
     f.write('<div id="emoji-grid">\n')
     f.write('</div>')
     f.write('</body>\n')
